@@ -5,7 +5,7 @@ class NoteForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            newNoteContent: 'something',
+            newNoteContent: '',
         };
         this.handleUserInput = this.handleUserInput.bind(this);
         this.writeNote = this.writeNote.bind(this);
