@@ -1,52 +1,93 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './style/css/main.css';
-import * as fire from 'firebase';
+import Note from './Note/Note';
+import NoteForm from './NoteForm/NoteForm';
+import { DB_CONFIG } from './FireConfig/config';
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 class App extends Component {
-    constructor(props) {
+
+    constructor(props){
         super(props);
-        this.state = { todoItems: [] }; // <- sets up react state
+        this.addNote = this.addNote.bind(this);
+        this.removeNote = this.removeNote.bind(this);
+
+        // Initialising Firebase with my config
+        this.app = firebase.initializeApp(DB_CONFIG);
+        this.database = this.app.database().ref().child('notes');
+
+        //Setting up React State for the Component
+        this.state = {
+            notes: [],
+        }
     }
-    /* Create reference to messages in Firebase Database */
+
     componentWillMount(){
-        let todoRef = fire.database().ref('todoItems').orderByKey().limitToLast(100);
-        todoRef.on('child_added', snapshot => {
-            /* Update React state when message is added at Firebase Database */
-            let item = { text: snapshot.val(), id: snapshot.key };
-            this.setState({ todoItems: [item].concat(this.state.todoItems) });
+        const previousNotes = this.state.notes;
+
+        //When a child is added to the database it will push the value to the notes array
+        this.database.on('child_added', snap => { //Data Snapshot Object
+            previousNotes.push({
+                id: snap.key, //take the key from the snapshot
+                noteContent: snap.val().noteContent, //take the note content from it too
+            })
+
+            this.setState({
+                notes: previousNotes //applies the snapshot data taken above to the previousNotes to update this state with the new array
+            })
+        })
+
+        this.database.on('child_removed', snap => {
+            for (var i = 0; i < previousNotes.length; i++) { //loop through array
+                if (previousNotes[i].id === snap.key) { //tries to match id to snapshot
+                    previousNotes.splice(i, 1); //number of items to delete at index (1)
+
+                }
+            }
+            this.setState({
+                notes: previousNotes
+            })
+
         })
     }
-    /* Adds Todo List Item */
-    addItem(e){
-        e.preventDefault(); // <- prevent form submit from reloading the page
-        /* Send the message to Firebase */
-        fire.database().ref('todoItems').push( this.inputEl.value );
-        this.inputEl.value = ''; // <- clears the input
+
+    //Add Note method
+    addNote(note) {
+        this.database.push().set({ noteContent: note });
     }
 
-    /* Removes Todo List Item */
-    removeItem(e){
-        e.preventDefault(); // <- prevent form submit from reloading the page
-        /* Send the message to Firebase */
-        fire.database().ref('todoItems').remove( this.inputEl.value );
-        this.inputEl.value = ''; // <- clears the input
+    //Remove Note Method
+    removeNote(noteId) {
+        this.database.child(noteId).remove();
     }
 
-    /*Renders to the DOM*/
     render() {
         return (
-            <form onSubmit={this.addItem.bind(this)}>
-                <h1>Todo List</h1>
-                <input type="text" ref={ el => this.inputEl = el }/>
-                <input class='waves-effect waves-light btn' type="submit"/>
-                <ul>
-                    { /* Render the list of messages */
-                        this.state.todoItems.map( item => <li key={item.id}>{item.text}</li> )
+            <div className="notesWrapper">
+                <div className="notesHeader">
+                    <div className="heading">To-Do List</div>
+                </div>
+
+                <div className="notesBody">
+                    {
+                        this.state.notes.map((note) => {
+                            return (
+                                <Note
+                                    noteContent = {note.noteContent}
+                                    noteId = {note.id}
+                                    key = {note.id}
+                                    removeNote = {this.removeNote}/>
+                                )
+                        })
                     }
-                </ul>
-            </form>
+                </div>
+
+                <div className="notesFooter">
+                    <NoteForm addNote={this.addNote}/>
+                </div>
+            </div>
         );
     }
 }

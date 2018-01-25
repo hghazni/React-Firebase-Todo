@@ -1,7 +1,22 @@
-.test {
-  background: black;
+html, body {
+  margin: 0;
+  background-color: black;
+  color: white;
 }
 
-.text {
-  color: #222222;
+.notesWrapper {
+  display: flex;
+  flex-flow: column;
+  margin: auto;
+  text-align: center;
+}
+
+.heading {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 2rem;
+  color: gold;
+}
+
+.fade-in {
+  opacity: 1;
 }

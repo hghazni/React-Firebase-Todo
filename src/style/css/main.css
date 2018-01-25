@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Permanent+Marker");
+html, body {
+  margin: 0;
+  background-color: black;
+  color: white; }
+
+.notesWrapper {
+  display: flex;
+  flex-flow: column;
+  margin: auto;
+  text-align: center; }
+
+.heading {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 2rem;
+  color: gold; }
+
+.fade-in {
+  opacity: 1; }
+
+.note {
+  background: lightgrey;
+  padding: 0.5rem;
+  margin: 0.5rem; }
+  .note .noteContent {
+    color: black;
+    font-weight: 600;
+    font-size: 1.5rem; }

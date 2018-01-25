@@ -1,1 +1,9 @@
+//Core
 @import "core/general";
+@import "core/colour";
+@import "core/mixins";
+@import "core/typography";
+
+//Partials
+@import "partial/button";
+@import "partial/note";
