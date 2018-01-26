@@ -7,7 +7,6 @@ import NoteForm from './NoteForm/NoteForm';
 import { DB_CONFIG } from './FireConfig/config';
 import firebase from 'firebase/app';
 import 'firebase/database';
-import 'manifest.json';
 
 class App extends Component {
 
