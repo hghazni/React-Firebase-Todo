@@ -1,6 +1,6 @@
 html, body {
   margin: 0;
-  background-color: black;
+  background-color: darkslateblue;
   color: white;
 }
 
@@ -11,10 +11,18 @@ html, body {
   text-align: center;
 }
 
+.notesHeader {
+  p {
+    margin-top: 0;
+  }
+}
+
 .heading {
-  font-family: 'Permanent Marker', cursive;
-  font-size: 2rem;
+  font-family: 'Sedgwick Ave', cursive;
+  font-weight: 600;
+  font-size: 4rem;
   color: gold;
+  text-shadow: 2px 2px 4px rgba(00, 00, 00, 0.5);
 }
 
 .fade-in {
