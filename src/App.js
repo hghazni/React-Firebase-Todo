@@ -79,7 +79,7 @@ class App extends Component {
 
     //Update Note
     updateNote(noteId) {
-        this.database.child(noteId).update(this.state);
+        //this.database.child(noteId).update(this.state);
     }
 
 
